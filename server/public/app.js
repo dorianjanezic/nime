@@ -1,64 +1,27 @@
-let socket = io();
+// import * as Tone from "tone";
 
-//Listen for confirmation of connection
-socket.on('connect', function() {
-    console.log("Connected");
-  });
+// console.log("hi");
+// //create a synth and connect it to the main output (your speakers)
+// const synth = new Tone.Synth().toDestination();
 
-let r;
-let g;
-let b;
+// //play a middle 'C' for the duration of an 8th note
+// synth.triggerAttackRelease("C2", "8n");
 
-function setup(){
-    createCanvas(windowWidth, windowHeight);
-    background(255);
-
-    //create random r,g,b values
-    r = random(255);
-    g = random(255);
-    b = random(255);
-
-    //Listen for "positionUpdate" msg form the servber
-    socket.on('positionUpdate', function(data){
-        console.log(data);
-        drawPos(data);
-    });
-
-    //Listen for "forceChange" msg from the server
-    socket.on('forceChange', function(data){
-        //create random r,g,b values
-        r = random(255);
-        g = random(255);
-        b = random(255);  
-    })
+var client = new Paho.Client(mqtt.192.168.1.4, Number(mqtt.1883), "sub-client-id");
+// set callback handlers
+client.onConnectionLost = onConnectionLost;
+client.onMessageArrived = onMessageArrived;
+// connect the client
+console.log("attempting to connect...");
+client.connect({ onSuccess: onConnect, useSSL: true });
+// called when the client connects
+function onConnect() {
+  // Once a connection has been made, make a subscription and send a message.
+  console.log("onConnect");
+  client.subscribe(topic_name);
 }
 
-function mouseMoved(){
-    // fill(0); 
-    // ellipse(mouseX, mouseY, 10,10);
-    let mousePos = {
-                    x: mouseX,
-                    y: mouseY,
-                    "red": r,
-                    "green": g,
-                    "blue": b
-                };
-                
-    socket.emit('position', mousePos);
-}
-
-function drawPos(obj){
-    //use the r,g,b values sent from the server
-    fill(obj.red, obj.green, obj.blue); 
-    ellipse(obj.x, obj.y, 10,10);
-}
-
-function mousePressed(){
-    //create random r,g,b values
-    r = random(255);
-    g = random(255);
-    b = random(255);
-    
-    socket.emit("change", {"msg": "change"});
-
-}
+// client.on("message", function (topic, message) {
+//   console.log(topic, " : ", message.toString());
+//   client.end();
+// });
