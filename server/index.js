@@ -22,6 +22,34 @@ const port = 1883;
 server.listen(port, function () {
   console.log('Aedes listening on port:', port);
 });
+// This is an example
+
+// io.sockets.on('connection', function (socket) {
+//   console.log('Connected');
+//   // WebSocket Connection
+//   // var lightvalue = 0; //static variable for current status
+//   // socket.on('gyro', function (data) {
+//   //   console.log('gyroo');
+//   //   socket.emit('gyro', 'packet.payload.toString()'); //send button status to client
+//   // });
+//   io.sockets.emit('gyro', packet.payload.toString());
+// });
+
+// ws.createServer({ server: httpServer }, aedes.handle);
+
+// function handler(req, res) {
+//   //create server
+//   fs.readFile(__dirname + '/public/index.html', function (err, data) {
+//     //read file index.html in public folder
+//     if (err) {
+//       res.writeHead(404, { 'Content-Type': 'text/html' }); //display 404 on error
+//       return res.end('404 Not Found');
+//     }
+//     res.writeHead(200, { 'Content-Type': 'text/html' }); //write HTML
+//     res.write(data); //write data from index.html
+//     return res.end();
+//   });
+// }
 
 aedes.on('subscribe', function (subscriptions, client) {
   db.insert({

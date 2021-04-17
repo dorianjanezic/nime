@@ -1,14 +1,16 @@
-var mqtt = require('mqtt')
-var client  = mqtt.connect('mqtt://localhost:1883')
-console.log(client)
- 
-client.on('connect', function () {
+let socket = io();
+    window.addEventListener('load', function () {
 
-      client.publish('presence', 'Hello mqtt')
-})
- 
-client.on('message', function (topic, message) {
-  // message is Buffer
-  console.log(message.toString())
-  client.end()
-})
+
+      //Listen for confirmation of connection
+      socket.on('connect', function () {
+        console.log("Connected");
+      });
+
+
+    });
+
+    socket.on('distance', function (data) {
+      console.log(data);
+      document.getElementById("p1").innerHTML = data;
+    });
