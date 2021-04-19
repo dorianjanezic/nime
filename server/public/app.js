@@ -1,16 +1,19 @@
-// const { Tone } = require("tone/build/esm/core/Tone");
-
-let socket = io();
-window.addEventListener("load", function () {
-  //Listen for confirmation of connection
-  socket.on("connect", function () {
-    console.log("Connected");
-  });
+const client = mqtt.connect("ws://localhost:8888", {
+  clientId: "javascript",
 });
 
-socket.on("distance", function (data) {
-  console.log(data);
-  document.getElementById("p1").innerHTML = data;
+client.on("connect", function () {
+  console.log("connected!");
+  client.subscribe("distance");
+});
+
+client.on("message", function (topic, message) {
+  console.log(topic + ": " + message.toString());
+  document.getElementById("p1").innerHTML = message.toString();
+});
+
+document.getElementById("button1").addEventListener("click", function () {
+  client.publish("hello", "world");
 });
 
 //attach a click listener to a play button
